@@ -1,4 +1,4 @@
-FROM golang:1.18.1-alpine3.15 as build
+FROM golang:1.18-alpine as build
 
 RUN apk upgrade --no-cache --force
 RUN apk add --update build-base make git
@@ -12,5 +12,5 @@ RUN make test
 RUN make build
 RUN ./polaris_bot --help
 
-FROM scratch AS export-stage
+FROM gcr.io/distroless/static AS export-stage
 COPY --from=build /go/src/github.com/vibin18/polaris_bot/polaris_bot /
