@@ -8,7 +8,6 @@ WORKDIR /go/src/github.com/vibin18/polaris_bot
 # Compile
 COPY ./ /go/src/github.com/vibin18/polaris_bot
 RUN make dependencies
-RUN make test
 RUN make build
 RUN ./polaris_bot --help
 
