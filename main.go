@@ -7,6 +7,7 @@ import (
 	"github.com/robfig/cron"
 	log "github.com/sirupsen/logrus"
 	"os"
+	"time"
 )
 
 type opts struct {
@@ -47,8 +48,15 @@ func main() {
 	}
 
 	go func() {
-		c := cron.New()
+		timeZone, err := time.LoadLocation("Europe/Berlin")
+		if err != nil {
+			log.Panicf(err.Error())
+			return
+		}
+
+		c := cron.NewWithLocation(timeZone)
 		scheduledTime := fmt.Sprintf("0-59/20 %v %v %v * *", arg.AlertMinute, arg.AlertHour, arg.AlertDay)
+
 		c.AddFunc(scheduledTime, func() {
 			messageSend, err := bot.ChannelMessageSend(arg.DiscordChannelId, "Reminder: Book your Timesheets")
 			if err != nil {
