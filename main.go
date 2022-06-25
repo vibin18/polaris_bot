@@ -11,11 +11,12 @@ import (
 )
 
 type opts struct {
-	DiscordToken     string `           long:"token"      env:"DISCORD_TOKEN"  description:"Discord Bot token" mandatory:"true"`
-	DiscordChannelId string `           long:"id"      env:"DISCORD_CHANNEL"  description:"Discord Channel ID" mandatory:"true"`
-	AlertDay         string `           long:"day"      env:"DAY"  description:"Alerting Day" mandatory:"true"`
-	AlertHour        string `           long:"hour"      env:"HOUR"  description:"Alerting Hour" mandatory:"true"`
-	AlertMinute      string `           long:"minute"      env:"MINUTE"  description:"Alerting Minute" mandatory:"true"`
+	DiscordToken     string `           long:"token"      env:"DISCORD_TOKEN"  description:"Discord Bot token" required:"true"`
+	DiscordChannelId string `           long:"id"      env:"DISCORD_CHANNEL"  description:"Discord Channel ID" required:"true"`
+	AlertDay         string `           long:"day"      env:"DAY"  description:"Alerting Day" required:"true"`
+	AlertHour        string `           long:"hour"      env:"HOUR"  description:"Alerting Hour" required:"true"`
+	AlertMinute      string `           long:"minute"      env:"MINUTE"  description:"Alerting Minute" required:"true"`
+	AlertTimeZone    string `           long:"timezone"      env:"TIMEZONE"  description:"Alerting Timezone" default:"Europe/Berlin" required:"true"`
 }
 
 var (
@@ -48,7 +49,7 @@ func main() {
 	}
 
 	go func() {
-		timeZone, err := time.LoadLocation("Europe/Berlin")
+		timeZone, err := time.LoadLocation(arg.AlertTimeZone)
 		if err != nil {
 			log.Panicf(err.Error())
 			return
